@@ -18,10 +18,6 @@ const (
 	NonceExpire = 180 * time.Second
 )
 
-var (
-	logger log.Logger
-)
-
 // AuthSession .
 type AuthSession struct {
 	nonce   string
@@ -72,14 +68,12 @@ func (auth *ServerAuthorizer) Authenticate(request sip.Request, tx sip.ServerTra
 
 	from, _ := request.From()
 
-	/*
-		TODO: check domain
-		to, _ := request.To()
-		if to.Address.Host() != from.Address.Host() {
-			sendResponse(request, tx, 400, "User in To and From fields do not match.")
-			return "", false
-		}
-	*/
+	// check domain
+	// to, _ := request.To()
+	// if to.Address.Host() != from.Address.Host() {
+	// 	sendResponse(request, tx, 400, "User in To and From fields do not match.")
+	// 	return "", false
+	// }
 
 	hdrs := request.GetHeaders("Authorization")
 	if len(hdrs) == 0 {

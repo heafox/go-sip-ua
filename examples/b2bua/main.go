@@ -3,8 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"net/http"
-	_ "net/http/pprof"
 	"os"
 	"os/signal"
 	"syscall"
@@ -38,7 +36,6 @@ Options:
 }
 
 func consoleLoop(b2bua *b2bua.B2BUA) {
-
 	fmt.Println("Please select command.")
 	for {
 		t := prompt.Input("CLI> ", completer,
@@ -123,13 +120,13 @@ func consoleLoop(b2bua *b2bua.B2BUA) {
 }
 
 func main() {
-	noconsole := false
+	console := false
 	disableAuth := false
 	enableTLS := false
 	h := false
 	flag.BoolVar(&h, "h", false, "this help")
-	flag.BoolVar(&noconsole, "nc", false, "no console mode")
-	flag.BoolVar(&disableAuth, "da", false, "disable auth mode")
+	flag.BoolVar(&console, "c", false, "console mode")
+	flag.BoolVar(&disableAuth, "da", true, "disable auth mode")
 	flag.BoolVar(&enableTLS, "tls", false, "enable TLS")
 	flag.Usage = usage
 
@@ -143,11 +140,6 @@ func main() {
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, syscall.SIGTERM, syscall.SIGINT)
 
-	go func() {
-		fmt.Print("Start pprof on :6658\n")
-		http.ListenAndServe(":6658", nil)
-	}()
-
 	b2bua := b2bua.NewB2BUA(disableAuth, enableTLS)
 
 	// Add sample accounts.
@@ -156,7 +148,7 @@ func main() {
 	b2bua.AddAccount("300", "300")
 	b2bua.AddAccount("400", "400")
 
-	if !noconsole {
+	if console {
 		consoleLoop(b2bua)
 		return
 	}

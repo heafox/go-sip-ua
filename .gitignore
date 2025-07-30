@@ -21,3 +21,4 @@ certs
 bin
 
 .DS_Store
+.vscode/launch.json
