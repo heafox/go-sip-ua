@@ -78,7 +78,6 @@ func NewB2BUA(disableAuth bool, enableTLS bool) *B2BUA {
 	stack := stack.NewSipStack(&stack.SipStackConfig{
 		UserAgent:  "Go B2BUA/1.0.0",
 		Extensions: []string{"replaces", "outbound"},
-		Dns:        "8.8.8.8",
 		ServerAuthManager: stack.ServerAuthManager{
 			Authenticator:     authenticator,
 			RequiresChallenge: b.requiresChallenge,
